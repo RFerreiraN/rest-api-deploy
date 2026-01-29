@@ -1,0 +1,30 @@
+### Traer todos los productos
+GET http://localhost:1314/productos
+
+### tarer un producto por su ID
+GET http://localhost:1314/productos/57a3b187-5541-4a4b-8708-7436c003b44e
+### filtrar por categoria 
+GET http://localhost:1314/productos?categoria=electronics
+
+### Crear un nuevo producto
+POST http://localhost:1314/productos
+Content-Type: application/json
+
+{
+    "title": "Laptop 3",
+    "price": 120,
+    "description": "Laptop HP",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
+    "rating": {
+     
+    }
+  }
+
+### Modificar Parcialmente un recurso
+PATCH http://localhost:1314/productos/1
+Content-Type: application/json
+
+{
+  "price": 200
+}
