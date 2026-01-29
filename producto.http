@@ -2,7 +2,7 @@
 GET http://localhost:1314/productos
 
 ### tarer un producto por su ID
-GET http://localhost:1314/productos/57a3b187-5541-4a4b-8708-7436c003b44e
+GET http://localhost:1314/productos/2
 ### filtrar por categoria 
 GET http://localhost:1314/productos?categoria=electronics
 
@@ -22,9 +22,12 @@ Content-Type: application/json
   }
 
 ### Modificar Parcialmente un recurso
-PATCH http://localhost:1314/productos/1
+PATCH http://localhost:1314/productos/3
 Content-Type: application/json
 
 {
   "price": 200
 }
+
+### Eliminar un producto 
+DELETE http://localhost:1314/productos/2
