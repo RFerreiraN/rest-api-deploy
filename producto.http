@@ -1,13 +1,13 @@
 ### Traer todos los productos
-GET http://localhost:1314/productos
+GET https://rest-api-deploy-1azc.onrender.com/productos
 
 ### tarer un producto por su ID
-GET http://localhost:1314/productos/2
+GET https://rest-api-deploy-1azc.onrender.com/productos/2
 ### filtrar por categoria 
-GET http://localhost:1314/productos?categoria=electronics
+GET https://rest-api-deploy-1azc.onrender.com/productos?categoria=electronics
 
 ### Crear un nuevo producto
-POST http://localhost:1314/productos
+POST https://rest-api-deploy-1azc.onrender.com/productos
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
   }
 
 ### Modificar Parcialmente un recurso
-PATCH http://localhost:1314/productos/3
+PATCH https://rest-api-deploy-1azc.onrender.com/productos/3
 Content-Type: application/json
 
 {
@@ -30,4 +30,4 @@ Content-Type: application/json
 }
 
 ### Eliminar un producto 
-DELETE http://localhost:1314/productos/2
+DELETE https://rest-api-deploy-1azc.onrender.com/productos/2

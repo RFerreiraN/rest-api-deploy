@@ -1,4 +1,4 @@
-const z = require('zod')
+import z from 'zod'
 
 const schemaRating = z.object({
   rate: z.number().positive().default(2.5),
@@ -14,17 +14,12 @@ const schemaProducto = z.object({
   category: z.string()
 })
 
-function validateProducto(objeto) {
+export function validateProducto(objeto) {
   return schemaProducto.safeParse(objeto)
 }
 
 // Función para validar parcialmente un elemento del recurso
 
-function validatePartialProducto(objeto) {
+export function validatePartialProducto(objeto) {
   return schemaProducto.partial().safeParse(objeto)
-}
-
-module.exports = {
-  validateProducto,
-  validatePartialProducto
 }
