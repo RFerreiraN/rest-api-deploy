@@ -1,42 +1,32 @@
 import { Router } from 'express'
-import { readJSON } from '../util.js'
 import { validatePartialProducto, validateProducto } from '../Schema/productos.js'
-import { randomUUID } from 'node:crypto'
-
-const productos = readJSON('./productos.json')
+import { ProductoModel } from '../models/producto.js'
 
 export const productsRouter = Router()
 
-productsRouter.get('/', (req, res) => {
+productsRouter.get('/', async (req, res) => {
   const { categoria } = req.query
-  if (categoria) {
-    const categoriaProducto = productos.filter(producto => producto.category === categoria)
-    return res.status(200).json(categoriaProducto)
-  }
+  const productos = await ProductoModel.getAll({ categoria })
   return res.json(productos)
 })
 
-productsRouter.get('/:id', (req, res) => {
+productsRouter.get('/:id', async (req, res) => {
   const { id } = req.params
-  const producto = productos.filter(producto => producto.id === id)
-  return res.status(200).json(producto)
+  const producto = await ProductoModel.getById({ id })
+  if (producto) return res.json(producto)
+  res.status(404).json({ message: 'Producto not found' })
 })
 
-productsRouter.post('/', (req, res) => {
+productsRouter.post('/', async (req, res) => {
   const result = validateProducto(req.body)
   if (result.error) {
     return res.status(400).json({ message: JSON.parse(result.error.message) })
   }
-
-  const nuevoProducto = {
-    id: randomUUID(),
-    ...result.data
-  }
-  productos.push(nuevoProducto)
-  return res.status(201).json(nuevoProducto)
+  const nuevoProducto = await ProductoModel.create({ input: result.data })
+  res.status(201).json(nuevoProducto)
 })
 
-productsRouter.patch('/:id', (req, res) => {
+productsRouter.patch('/:id', async (req, res) => {
   const result = validatePartialProducto(req.body)
 
   if (result.error) {
@@ -44,29 +34,15 @@ productsRouter.patch('/:id', (req, res) => {
   }
 
   const { id } = req.params
-  const index = productos.findIndex(producto => producto.id === id)
-
-  if (index < 0) {
-    return res.status(404).json({ message: '404 Producto Not Found' })
-  }
-
-  const updateProducto = {
-    ...productos[index],
-    ...result.data
-  }
-
-  productos[index] = updateProducto
+  const updateProducto = await ProductoModel.update({ id, input: result.data })
   return res.json(updateProducto)
 })
 
-productsRouter.delete('/:id', (req, res) => {
+productsRouter.delete('/:id', async (req, res) => {
   const { id } = req.params
-  const index = productos.findIndex(producto => producto.id === id)
-
-  if (index < 0) {
-    return res.status(404).json({ message: '404 Not Found' })
+  const result = await ProductoModel.delete({ id })
+  if (!result) {
+    return res.status(404).json({ message: '404 Producto not found' })
   }
-
-  productos.splice(index, 1)
-  return res.status(204)
+  return res.json({ message: 'Producto deleted' })
 })
