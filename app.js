@@ -1,78 +1,77 @@
 import express, { json } from 'express'
 import cors from 'cors'
-import { readJSON } from './util.js'
+import { routerProducto } from './routes/productos.js'
 
 const app = express()
-
-const productos = readJSON('./productos.json')
 
 app.disable('x-powered-by')
 app.use(json())
 app.use(cors())
+app.use('/productos', routerProducto)
 
-app.get('/productos', (req, res) => {
-  const { categoria } = req.query
-  if (categoria) {
-    const categoriaProducto = productos.filter(producto => producto.category === categoria)
-    return res.status(200).json(categoriaProducto)
-  }
-  return res.json(productos)
-})
+// app.get('/productos', (req, res) => {
+//   const { categoria } = req.query
+//   if (categoria) {
+//     const categoriaProducto = productos.filter(producto => producto.category === categoria)
+//     return res.status(200).json(categoriaProducto)
+//   }
+//   return res.json(productos)
+// })
 
-app.get('/productos/:id', (req, res) => {
-  const { id } = req.params
-  const producto = productos.filter(producto => producto.id.toString() === id)
-  return res.status(200).json(producto)
-})
+// app.get('/productos/:id', (req, res) => {
+//   const { id } = req.params
+//   const producto = productos.filter(producto => producto.id.toString() === id)
+//   return res.status(200).json(producto)
+// })
 
-app.post('/productos', (req, res) => {
-  const result = validateProducto(req.body)
-  if (result.error) {
-    return res.status(400).json({ message: JSON.parse(result.error.message) })
-  }
+// app.post('/productos', (req, res) => {
+//   const result = validateProducto(req.body)
+//   if (result.error) {
+//     return res.status(400).json({ message: JSON.parse(result.error.message) })
+//   }
 
-  const nuevoProducto = {
-    id: randomUUID(),
-    ...result.data
-  }
+//   const nuevoProducto = {
+//     id: randomUUID(),
+//     ...result.data
+//   }
 
-  productos.push(nuevoProducto)
-  return res.status(200).json(nuevoProducto)
-})
+//   productos.push(nuevoProducto)
+//   return res.status(200).json(nuevoProducto)
+// })
 
-app.patch('/productos/:id', (req, res) => {
-  const result = validatePartialProducto(req.body)
+// app.patch('/productos/:id', (req, res) => {
+//   const result = validatePartialProducto(req.body)
 
-  if (result.error) {
-    return res.status(400).json({ message: JSON.parse(result.error.message) })
-  }
+//   if (result.error) {
+//     return res.status(400).json({ message: JSON.parse(result.error.message) })
+//   }
 
-  const { id } = req.params
-  const index = productos.findIndex(producto => producto.id.toString() === id)
+//   const { id } = req.params
+//   const index = productos.findIndex(producto => producto.id.toString() === id)
 
-  if (index < 0) {
-    return res.status(404).json({ message: '404 Producto Not Found' })
-  }
+//   if (index < 0) {
+//     return res.status(404).json({ message: '404 Producto Not Found' })
+//   }
 
-  const updateProducto = {
-    ...productos[index],
-    ...result.data
-  }
+//   const updateProducto = {
+//     ...productos[index],
+//     ...result.data
+//   }
 
-  productos[index] = updateProducto
+//   productos[index] = updateProducto
 
-  return res.json(updateProducto)
-})
+//   return res.json(updateProducto)
+// })
 
-app.delete('/productos/:id', (req, res) => {
-  const { id } = req.params
-  const index = productos.findIndex(producto => producto.id.toString() === id)
-  if (index < 0) {
-    return res.status(404).json({ message: '404 Producto Not Found' })
-  }
-  productos.splice(index, 1)
-  return res.status(204).json({})
-})
+// app.delete('/productos/:id', (req, res) => {
+//   const { id } = req.params
+//   const index = productos.findIndex(producto => producto.id.toString() === id)
+//   if (index < 0) {
+//     return res.status(404).json({ message: '404 Producto Not Found' })
+//   }
+//   productos.splice(index, 1)
+//   return res.status(204).json({})
+// })
 
 app.use((req, res) => {
   return res.status(404).json({ message: '404 Not Found' })
