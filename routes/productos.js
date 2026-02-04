@@ -2,29 +2,20 @@ import { Router } from 'express'
 import { readJSON } from '../util.js'
 import { validateProducto, validatePartialProducto } from '../Schema/productos.js'
 import { randomUUID } from 'node:crypto'
+import { ProductoModel } from '../models/producto.js'
 
 export const routerProducto = Router()
 const productos = readJSON('./productos.json')
 
-routerProducto.get('/', (req, res) => {
+routerProducto.get('/', async (req, res) => {
   const { categoria } = req.query
-  if (categoria) {
-    const categoriaProducto = productos.filter(
-      producto => producto.category === categoria
-    )
-    return res.status(200).json(categoriaProducto)
-  }
+  const productos = await ProductoModel.getAll({ categoria })
   return res.json(productos)
 })
 
-routerProducto.get('/:id', (req, res) => {
+routerProducto.get('/:id', async (req, res) => {
   const { id } = req.params
-  const getProducto = productos.find(
-    producto => producto.id.toString() === id
-  )
-  if (!getProducto) {
-    return res.status(404).json({ message: '404 Producto noy found' })
-  }
+  const getProducto = await ProductoModel.getById({ id })
   return res.json(getProducto)
 })
 
