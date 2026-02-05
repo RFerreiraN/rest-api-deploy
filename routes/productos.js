@@ -1,27 +1,36 @@
 import { Router } from 'express'
 import { readJSON } from '../util.js'
-import { validateProducto, validatePartialProducto } from '../Schema/productos.js'
+import { validatePartialProducto, validateProducto } from '../Schema/productos.js'
 import { randomUUID } from 'node:crypto'
-import { ProductoModel } from '../models/producto.js'
 
 export const routerProducto = Router()
 const productos = readJSON('./productos.json')
 
-routerProducto.get('/', async (req, res) => {
+routerProducto.get('/', (req, res) => {
   const { categoria } = req.query
-  const productos = await ProductoModel.getAll({ categoria })
+  if (categoria) {
+    const categoriaProducto = productos.filter(
+      producto => producto.category === categoria
+    )
+    return res.json(categoriaProducto)
+  }
   return res.json(productos)
 })
 
-routerProducto.get('/:id', async (req, res) => {
+routerProducto.get('/:id', (req, res) => {
   const { id } = req.params
-  const getProducto = await ProductoModel.getById({ id })
+
+  if (!id) {
+    return res.status(404).json({ message: 'Producto no encontrado' })
+  }
+  const getProducto = productos.find(
+    producto => producto.id.toString() === id
+  )
   return res.json(getProducto)
 })
 
 routerProducto.post('/', (req, res) => {
   const result = validateProducto(req.body)
-
   if (result.error) {
     return res.status(400).json({ message: JSON.parse(result.error.message) })
   }
@@ -30,31 +39,29 @@ routerProducto.post('/', (req, res) => {
     id: randomUUID(),
     ...result.data
   }
-
   productos.push(nuevoProducto)
   return res.json(nuevoProducto)
 })
 
 routerProducto.patch('/:id', (req, res) => {
   const result = validatePartialProducto(req.body)
-
   if (result.error) {
-    return res.status(400).json({ message: JSON.parse(result.error.message) })
+    return res.status(404).json({ message: JSON.parse(result.error.message) })
   }
   const { id } = req.params
-  const indexProducto = productos.findIndex(
+  const index = productos.findIndex(
     producto => producto.id.toString() === id
   )
-  if (indexProducto < 0) {
-    return res.status(404).json({ message: '404 Producto not found' })
-  }
 
+  if (index < 0) {
+    return res.status(404).json({ message: 'Producto no encontrado' })
+  }
   const updateProducto = {
-    ...productos[indexProducto],
+    ...productos[index],
     ...result.data
   }
 
-  productos[indexProducto] = updateProducto
+  productos[index] = updateProducto
   return res.json(updateProducto)
 })
 
@@ -64,7 +71,7 @@ routerProducto.delete('/:id', (req, res) => {
     producto => producto.id.toString() === id
   )
   if (index < 0) {
-    return res.status(404).json({ message: '404 Not Found' })
+    return res.status(404).json({ message: 'Producto no encontrado' })
   }
 
   productos.splice(index, 1)
