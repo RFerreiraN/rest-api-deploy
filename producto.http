@@ -2,7 +2,7 @@
 GET https://rest-api-deploy-1azc.onrender.com/productos
 
 ### tarer un producto por su ID
-GET https://rest-api-deploy-1azc.onrender.com/productos/2
+GET https://rest-api-deploy-1azc.onrender.com/productos/3
 ### filtrar por categoria 
 GET https://rest-api-deploy-1azc.onrender.com/productos?categoria=electronics
 
@@ -30,4 +30,4 @@ Content-Type: application/json
 }
 
 ### Eliminar un producto 
-DELETE https://rest-api-deploy-1azc.onrender.com/productos/2
+DELETE https://rest-api-deploy-1azc.onrender.com/productos/4b81bfc5-0f08-4163-a3c4-ecb6529064ee

@@ -1,79 +1,58 @@
 import { Router } from 'express'
 import { readJSON } from '../util.js'
 import { validatePartialProducto, validateProducto } from '../Schema/productos.js'
-import { randomUUID } from 'node:crypto'
+import { ModelProducto } from '../models/producto.js'
 
 export const routerProducto = Router()
 const productos = readJSON('./productos.json')
 
-routerProducto.get('/', (req, res) => {
+routerProducto.get('/', async (req, res) => {
   const { categoria } = req.query
   if (categoria) {
-    const categoriaProducto = productos.filter(
-      producto => producto.category === categoria
-    )
+    const categoriaProducto = await ModelProducto.getAll({ categoria })
     return res.json(categoriaProducto)
   }
   return res.json(productos)
 })
 
-routerProducto.get('/:id', (req, res) => {
+routerProducto.get('/:id', async (req, res) => {
   const { id } = req.params
 
-  if (!id) {
+  const getProducto = await ModelProducto.getById({ id })
+  if (!getProducto) {
     return res.status(404).json({ message: 'Producto no encontrado' })
   }
-  const getProducto = productos.find(
-    producto => producto.id.toString() === id
-  )
   return res.json(getProducto)
 })
 
-routerProducto.post('/', (req, res) => {
+routerProducto.post('/', async (req, res) => {
   const result = validateProducto(req.body)
   if (result.error) {
     return res.status(400).json({ message: JSON.parse(result.error.message) })
   }
 
-  const nuevoProducto = {
-    id: randomUUID(),
-    ...result.data
-  }
-  productos.push(nuevoProducto)
+  const nuevoProducto = await ModelProducto.create({ input: result.data })
   return res.json(nuevoProducto)
 })
 
-routerProducto.patch('/:id', (req, res) => {
+routerProducto.patch('/:id', async (req, res) => {
   const result = validatePartialProducto(req.body)
   if (result.error) {
-    return res.status(404).json({ message: JSON.parse(result.error.message) })
+    return res.status(400).json({ message: JSON.parse(result.error.message) })
   }
+
   const { id } = req.params
-  const index = productos.findIndex(
-    producto => producto.id.toString() === id
-  )
-
-  if (index < 0) {
-    return res.status(404).json({ message: 'Producto no encontrado' })
-  }
-  const updateProducto = {
-    ...productos[index],
-    ...result.data
-  }
-
-  productos[index] = updateProducto
+  const updateProducto = await ModelProducto.update({ id, input: result.data })
   return res.json(updateProducto)
 })
 
-routerProducto.delete('/:id', (req, res) => {
+routerProducto.delete('/:id', async (req, res) => {
   const { id } = req.params
-  const index = productos.findIndex(
-    producto => producto.id.toString() === id
-  )
-  if (index < 0) {
-    return res.status(404).json({ message: 'Producto no encontrado' })
+  const result = await ModelProducto.delete({ id })
+
+  if (!result) {
+    return res.status(404).json({ message: 'No se puedo borrar el producto, No ha sido encontrado' })
   }
 
-  productos.splice(index, 1)
-  return res.status(204).send()
+  return res.json({ message: 'Producto eliminado' })
 })
