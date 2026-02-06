@@ -10,6 +10,7 @@ export class ModelProducto {
         producto => producto.category === categoria
       )
     }
+    return productos
   }
 
   static async getById({ id }) {
@@ -24,6 +25,7 @@ export class ModelProducto {
       ...input
     }
     productos.push(nuevoProducto)
+    return nuevoProducto
   }
 
   static async update({ id, input }) {
@@ -39,6 +41,7 @@ export class ModelProducto {
       ...input
     }
     productos[index] = updateProducto
+    return updateProducto
   }
 
   static async delete({ id }) {

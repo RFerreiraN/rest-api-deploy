@@ -30,4 +30,4 @@ Content-Type: application/json
 }
 
 ### Eliminar un producto 
-DELETE https://rest-api-deploy-1azc.onrender.com/productos/4b81bfc5-0f08-4163-a3c4-ecb6529064ee
+DELETE https://rest-api-deploy-1azc.onrender.com/productos/4
