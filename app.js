@@ -1,6 +1,7 @@
 import express, { json } from 'express'
 import cors from 'cors'
 import { routerProducto } from './routes/productos.js'
+import { connectDB } from './database/mongoProductos.js'
 
 const app = express()
 
@@ -8,6 +9,8 @@ app.disable('x-powered-by')
 app.use(json())
 app.use(cors())
 app.use('/productos', routerProducto)
+
+connectDB()
 
 // app.get('/productos', (req, res) => {
 //   const { categoria } = req.query
@@ -82,3 +85,7 @@ const PORT = process.env.PORT ?? 1314
 app.listen(PORT, () => {
   console.log('Server Listening on port: https://rest-api-deploy-1azc.onrender.com/productos')
 })
+
+/*
+mongodb+srv://ricardevferreira_db_user:kykKgSuoF9tuayrJ@dev-cluster.i1x791b.mongodb.net/?appName=dev-cluster
+*/
