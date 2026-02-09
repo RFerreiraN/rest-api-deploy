@@ -14,7 +14,7 @@
 
 import { MongoClient } from 'mongodb'
 
-const url = 'mongodb+srv://ricardevferreira_db_user:kykKgSuoF9tuayrJ@dev-cluster.i1x791b.mongodb.net/?appName=dev-cluster'
+const url = process.env.URL_DB
 
 const client = new MongoClient(url)
 
