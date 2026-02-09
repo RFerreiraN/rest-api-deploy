@@ -11,10 +11,10 @@ POST https://rest-api-deploy-1azc.onrender.com/productos
 Content-Type: application/json
 
 {
-    "title": "Laptop 3",
-    "price": 120,
-    "description": "Laptop HP",
-    "category": "men's clothing",
+    "title": "Chaqueta de cuero",
+    "price": 520,
+    "description": "Chaqueta de cuero de alta calidad",
+    "category": "Putas",
     "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
     "rating": {
      
@@ -22,7 +22,7 @@ Content-Type: application/json
   }
 
 ### Modificar Parcialmente un recurso
-PATCH https://rest-api-deploy-1azc.onrender.com/productos/3
+PATCH https://rest-api-deploy-1azc.onrender.com/productos/698a623d6685bc72b4fdf6d7
 Content-Type: application/json
 
 {
@@ -30,4 +30,4 @@ Content-Type: application/json
 }
 
 ### Eliminar un producto 
-DELETE https://rest-api-deploy-1azc.onrender.com/productos/4
+DELETE https://rest-api-deploy-1azc.onrender.com/productos/698a623d6685bc72b4fdf6d7

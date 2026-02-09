@@ -8,6 +8,7 @@ const ratingSchema = new mongoose.Schema({
 const productoSchema = new mongoose.Schema({
   title: { type: String, require: true },
   price: { type: Number, require: true },
+  category: { type: String },
   description: { type: String },
   image: { type: String },
   rating: ratingSchema
