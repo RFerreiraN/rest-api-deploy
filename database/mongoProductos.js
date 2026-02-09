@@ -7,8 +7,11 @@ export async function connectDB() {
   try {
     await mongoose.connect(uri)
     console.log('Conectado a base de datos')
+    console.log('📦 Base de datos usada:', mongoose.connection.name)
   } catch (error) {
     console.error('Error al conectar con base de datos', error)
     process.exit(1)
   }
 }
+
+
