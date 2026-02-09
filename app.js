@@ -85,7 +85,3 @@ const PORT = process.env.PORT ?? 1314
 app.listen(PORT, () => {
   console.log('Server Listening on port: https://rest-api-deploy-1azc.onrender.com/productos')
 })
-
-/*
-mongodb+srv://ricardevferreira_db_user:kykKgSuoF9tuayrJ@dev-cluster.i1x791b.mongodb.net/?appName=dev-cluster
-*/
